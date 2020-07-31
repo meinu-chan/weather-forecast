@@ -1,33 +1,44 @@
-import React, { Component } from "react";
-import axios from "axios";
+import React, { Component } from 'react';
+import axios from 'axios';
 
-import Forms from "./Components/Form";
-import Weather from "./Components/Weather";
+import Forms from './Components/Form';
+import Weather from './Components/Weather';
+// import Forecast16 from "./Components/Forecast16";
 
-const API_KEY = "809a9d644a33e1d3d06d73be2a7232b1";
+const API_KEY = '809a9d644a33e1d3d06d73be2a7232b1';
 
 export default class App extends Component {
   constructor() {
     super();
     this.state = {
-      main: { name: "", sunrise: 0, sunset: 0, temp: 0, country: "" },
-      value: "",
+      info: {
+        country: '',
+        id: undefined,
+        name: '',
+        sunrise: undefined,
+        sunset: undefined,
+        timezone: undefined,
+        list: [],
+      },
+      value: '',
     };
   }
 
   componentDidMount() {
     axios
-      .get(
-        `http://api.openweathermap.org/data/2.5/weather?q=Kiev&appid=${API_KEY}&units=metric`
-      )
+      .get(`http://api.openweathermap.org/data/2.5/forecast?q=Kiev&appid=${API_KEY}&units=metric`)
       .then((response) => {
+        // console.log(response.data.list[0]);
+        const { city, list } = response.data;
         this.setState({
-          main: {
-            name: response.data.name,
-            sunrise: this.giveMeNormalTime(response.data.sys.sunrise),
-            sunset: this.giveMeNormalTime(response.data.sys.sunset),
-            temp: response.data.main.temp,
-            country: response.data.sys.country,
+          info: {
+            country: city.country,
+            id: city.id,
+            name: city.name,
+            sunrise: this.giveMeNormalTime(city.sunrise + city.timezone),
+            sunset: this.giveMeNormalTime(city.sunset + city.timezone),
+            timezone: city.timezone,
+            list,
           },
         });
       })
@@ -47,29 +58,32 @@ export default class App extends Component {
     this.setState({ value: e.target.value });
   };
 
-  gettingWeather = async (e) => {
+  gettingWeatherForToday = async (e) => {
     if (this.state.value) {
       await axios
         .get(
-          `http://api.openweathermap.org/data/2.5/weather?q=${this.state.value}&appid=${API_KEY}&units=metric`
+          `http://api.openweathermap.org/data/2.5/forecast?q=${this.state.value}&appid=${API_KEY}&units=metric`,
         )
         .then((response) => {
+          const { city, list } = response.data;
           this.setState({
-            main: {
-              name: response.data.name,
-              sunrise: this.giveMeNormalTime(response.data.sys.sunrise),
-              sunset: this.giveMeNormalTime(response.data.sys.sunset),
-              temp: response.data.main.temp,
-              country: response.data.sys.country,
+            info: {
+              country: city.country,
+              id: city.id,
+              name: city.name,
+              sunrise: this.giveMeNormalTime(city.sunrise + city.timezone),
+              sunset: this.giveMeNormalTime(city.sunset + city.timezone),
+              timezone: city.timezone,
+              list,
             },
           });
         })
         .catch((err) => {
           if (err.response) {
-            alert(err.response.data.cod + " " + err.response.data.message);
+            alert(err.response.data.cod + ' ' + err.response.data.message);
             console.log(err.response);
           } else if (err.request) {
-            alert(err.request.data.cod + " " + err.request.data.message);
+            alert(err.request.data.cod + ' ' + err.request.data.message);
             console.log(err.request);
           } else {
             alert(err);
@@ -83,7 +97,7 @@ export default class App extends Component {
     let date = new Date();
     date.setTime(time * 1000);
 
-    return date.getHours() + ":" + date.getMinutes();
+    return date.getHours() + ':' + date.getMinutes();
   };
 
   render() {
@@ -91,10 +105,10 @@ export default class App extends Component {
       <div>
         <Forms
           key={this.state.name}
-          weatherMethod={this.gettingWeather.bind(this)}
+          weatherMethod={this.gettingWeatherForToday.bind(this)}
           valueHandler={this.handleSearch}
         />
-        <Weather {...this.state.main} />
+        <Weather {...this.state.info} />
       </div>
     );
   }
