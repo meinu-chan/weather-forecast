@@ -24,14 +24,14 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    this.gettingWeatherForToday();
+    this.gettingWeather();
   }
 
   handleSearch = (e) => {
     this.setState({ value: e.target.value });
   };
 
-  gettingWeatherForToday = async (e) => {
+  gettingWeather = async (e) => {
     if (this.state.value) {
       await axios
         .get(
@@ -78,7 +78,7 @@ export default class App extends Component {
       <div>
         <Forms
           key={this.state.name}
-          weatherMethod={this.gettingWeatherForToday.bind(this)}
+          weatherMethod={this.gettingWeather.bind(this)}
           valueHandler={this.handleSearch}
         />
         <Weather {...this.state.info} />

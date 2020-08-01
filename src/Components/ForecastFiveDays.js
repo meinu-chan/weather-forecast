@@ -28,18 +28,17 @@ export default function ForecastFiveDays({ date, deg, description, icon, id, spe
           )} Time: ${dateNormalizer(date.getHours())}:${date.getMinutes()}0`}</li>
           <li>Temperature: {temp}</li>
           <li>
-            Weather:
-            {icons.has(icon) ? icons.get(icon) : 'icon not found'}|{description}
+            Weather:{`${icons.has(icon) ? icons.get(icon) : 'icon not found'}  |  ${description}`}
           </li>
           <li>
-            Wind:
+            Wind:{'  '}
             <img
               src={compass}
               alt={`${deg}`}
               className="image"
               style={{ transform: `rotate(${deg}deg)` }}
             />
-            | {speed}
+            {`  | ${speed}`}
           </li>
         </ul>
       )}
