@@ -1,6 +1,7 @@
-import React from "react";
+import React from 'react';
 
-import { Form, Button } from "react-bootstrap";
+import { Form, Button } from 'react-bootstrap';
+import '../assets/css/Form.css';
 
 const Forms = (props) => {
   return (
@@ -9,6 +10,7 @@ const Forms = (props) => {
         placeholder="City..."
         key="city"
         onChange={props.valueHandler}
+        className="forms"
       />
       <Button onClick={props.weatherMethod} variant="outline-dark">
         Enter

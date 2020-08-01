@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import Forms from './Components/Form';
 import Weather from './Components/Weather';
-// import Forecast16 from "./Components/Forecast16";
+import ForecastFiveDays from './Components/ForecastFiveDays';
 
 const API_KEY = '809a9d644a33e1d3d06d73be2a7232b1';
 
@@ -28,7 +28,6 @@ export default class App extends Component {
     axios
       .get(`http://api.openweathermap.org/data/2.5/forecast?q=Kiev&appid=${API_KEY}&units=metric`)
       .then((response) => {
-        // console.log(response.data.list[0]);
         const { city, list } = response.data;
         this.setState({
           info: {
@@ -97,7 +96,7 @@ export default class App extends Component {
     let date = new Date();
     date.setTime(time * 1000);
 
-    return date.getHours() + ':' + date.getMinutes();
+    return `${date.getHours()}:${date.getMinutes()}`;
   };
 
   render() {
@@ -109,6 +108,7 @@ export default class App extends Component {
           valueHandler={this.handleSearch}
         />
         <Weather {...this.state.info} />
+        <ForecastFiveDays {...this.state.info.list} />
       </div>
     );
   }

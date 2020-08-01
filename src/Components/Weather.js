@@ -3,7 +3,7 @@ import React from 'react';
 import { Form } from 'react-bootstrap';
 
 import '../assets/css/weather.css';
-import compass from '../assets/img/compass.png';
+import ForecastFiveDays from './ForecastFiveDays';
 
 const style = {
   ul: {
@@ -11,9 +11,6 @@ const style = {
     margin: 0,
     padding: 0,
   },
-  // img:{
-  //   transform: rotate(wind.deg),
-  // }
 };
 
 // ☀️⛅️🌥☁️🌦🌧⛈🌩🌨
@@ -41,37 +38,21 @@ export default function Weather({ country, id, list, name, sunrise, sunset }) {
           <li>Sunset: {sunset}</li>
           <hr />
           <li className="d-flex">
-            {list.map((item, index) => {
-              const { dt_txt, main, weather, wind } = item;
-              const [weat] = weather;
-              let date = new Date(dt_txt);
-              return (
-                <ul key={`${index}_${dt_txt}`} className="info">
-                  <li>
-                    {`Day: ${date.getDate()}.Month: ${date.getMonth()} Time: ${date.getHours()}`}
-                  </li>
-                  <li>
-                    Temperature: {main.temp} | max: {main.temp_max} | min:
-                    {main.temp_min}
-                  </li>
-                  <li>
-                    Weather:
-                    {icons.has(weat.icon) ? icons.get(weat.icon) : 'icon not found'}|
-                    {weat.description}
-                  </li>
-                  <li>
-                    Wind:
-                    <img
-                      src={compass}
-                      alt="help me...."
-                      className="image"
-                      style={{ transform: `rotate(${wind.deg}deg)` }}
-                    />
-                    | {wind.speed}
-                  </li>
-                </ul>
-              );
-            })}
+            {console.log(list) ||
+              list.map((item, index) => {
+                const { dt_txt, weather, main, wind } = item;
+                const [weat] = weather;
+                let date = new Date(dt_txt);
+                return (
+                  <ForecastFiveDays
+                    key={`${index}_${dt_txt}`}
+                    {...weat}
+                    date={date}
+                    temp={main.temp}
+                    {...wind}
+                  />
+                );
+              })}
           </li>
         </ul>
       </Form>
