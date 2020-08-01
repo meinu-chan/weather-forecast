@@ -3,7 +3,6 @@ import axios from 'axios';
 
 import Forms from './Components/Form';
 import Weather from './Components/Weather';
-import ForecastFiveDays from './Components/ForecastFiveDays';
 
 const API_KEY = '809a9d644a33e1d3d06d73be2a7232b1';
 
@@ -20,37 +19,12 @@ export default class App extends Component {
         timezone: undefined,
         list: [],
       },
-      value: '',
+      value: 'Kiev',
     };
   }
 
   componentDidMount() {
-    axios
-      .get(`http://api.openweathermap.org/data/2.5/forecast?q=Kiev&appid=${API_KEY}&units=metric`)
-      .then((response) => {
-        const { city, list } = response.data;
-        this.setState({
-          info: {
-            country: city.country,
-            id: city.id,
-            name: city.name,
-            sunrise: this.giveMeNormalTime(city.sunrise + city.timezone),
-            sunset: this.giveMeNormalTime(city.sunset + city.timezone),
-            timezone: city.timezone,
-            list,
-          },
-        });
-      })
-      .catch((err) => {
-        console.log(err.response);
-        if (err.response) {
-          alert(err.response.cod + err.response.message);
-        } else if (err.request) {
-          alert(err.request.cod + err.request.message);
-        } else {
-          alert(err);
-        }
-      });
+    this.gettingWeatherForToday();
   }
 
   handleSearch = (e) => {
@@ -108,7 +82,6 @@ export default class App extends Component {
           valueHandler={this.handleSearch}
         />
         <Weather {...this.state.info} />
-        <ForecastFiveDays {...this.state.info.list} />
       </div>
     );
   }

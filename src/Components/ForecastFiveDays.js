@@ -15,12 +15,17 @@ icons
   .set('02n', '☁️')
   .set('02d', '☁️');
 
-export default function ForecastFiveDays({ date, deg, description, icon, id, main, speed, temp }) {
+export default function ForecastFiveDays({ date, deg, description, icon, id, speed, temp }) {
+  const dateNormalizer = (date) => {
+    return date < 10 ? `0${date}` : date;
+  };
   return (
     <>
       {id && (
         <ul className="info">
-          <li>{`Date: ${date.getDate()}.${date.getMonth()} Time: ${date.getHours()}:${date.getMinutes()}0`}</li>
+          <li>{`Date: ${dateNormalizer(date.getDate())}.${dateNormalizer(
+            date.getMonth(),
+          )} Time: ${dateNormalizer(date.getHours())}:${date.getMinutes()}0`}</li>
           <li>Temperature: {temp}</li>
           <li>
             Weather:

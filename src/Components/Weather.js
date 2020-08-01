@@ -26,6 +26,7 @@ icons
   .set('03n', '⛅️')
   .set('02n', '☁️')
   .set('02d', '☁️');
+
 export default function Weather({ country, id, list, name, sunrise, sunset }) {
   return (
     <div>
@@ -38,21 +39,20 @@ export default function Weather({ country, id, list, name, sunrise, sunset }) {
           <li>Sunset: {sunset}</li>
           <hr />
           <li className="d-flex">
-            {console.log(list) ||
-              list.map((item, index) => {
-                const { dt_txt, weather, main, wind } = item;
-                const [weat] = weather;
-                let date = new Date(dt_txt);
-                return (
-                  <ForecastFiveDays
-                    key={`${index}_${dt_txt}`}
-                    {...weat}
-                    date={date}
-                    temp={main.temp}
-                    {...wind}
-                  />
-                );
-              })}
+            {list.map((item, index) => {
+              const { dt_txt, weather, main, wind } = item;
+              const [weat] = weather;
+              let date = new Date(dt_txt);
+              return (
+                <ForecastFiveDays
+                  key={`${index}_${dt_txt}`}
+                  {...weat}
+                  date={date}
+                  temp={main.temp}
+                  {...wind}
+                />
+              );
+            })}
           </li>
         </ul>
       </Form>
