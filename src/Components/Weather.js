@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { Form, Container } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 
 import '../assets/css/weather.css';
 import ForecastFiveDays from './ForecastFiveDays';
+import Graph from './Graph';
 
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -32,7 +33,6 @@ icons
   .set('02d', '☁️');
 
 export default function Weather({ country, id, list, name, sunrise, sunset }) {
-  const ref = React.useRef(null);
   const settings = {
     dots: false,
     infinite: true,
@@ -43,34 +43,46 @@ export default function Weather({ country, id, list, name, sunrise, sunset }) {
     className: 'sl',
   };
 
+  let arr = [];
+
+  // React.useEffect(() => console.log(data));
+
   return (
-    <Container>
-      <Form>
-        <ul style={style.ul}>
-          <li>Country: {country}</li>
-          <li>Id: {id}</li>
-          <li>Name: {name}</li>
-          <li>Sunrise: {sunrise}</li>
-          <li>Sunset: {sunset}</li>
-        </ul>
-        <hr />
-        <Slider ref={ref} {...settings} style={{ padding: '10px' }}>
-          {list.map((item, index) => {
-            const { dt_txt, weather, main, wind } = item;
-            const [weat] = weather;
-            let date = new Date(dt_txt);
-            return (
-              <ForecastFiveDays
-                key={`${index}_${dt_txt}`}
-                {...weat}
-                date={date}
-                temp={main.temp}
-                {...wind}
-              />
-            );
-          })}
-        </Slider>
-      </Form>
+    <Container className="container-fluid">
+      <Col>
+        <Row>
+          <ul style={style.ul}>
+            <li>Country: {country}</li>
+            <li>Id: {id}</li>
+            <li>Name: {name}</li>
+            <li>Sunrise: {sunrise}</li>
+            <li>Sunset: {sunset}</li>
+          </ul>
+          <hr />
+        </Row>
+      </Col>
+      <Slider {...settings} style={{ padding: '10px' }}>
+        {list.map((item, index) => {
+          const { dt_txt, weather, main, wind } = item;
+          const [weat] = weather;
+          let date = new Date(dt_txt);
+          arr.push({ x: date, y: main.temp });
+          return (
+            <ForecastFiveDays
+              key={`${index}_${dt_txt}`}
+              {...weat}
+              date={date}
+              temp={main.temp}
+              {...wind}
+            />
+          );
+        })}
+      </Slider>
+      <Col>
+        <Row>
+          <Graph data={[...arr]} />
+        </Row>
+      </Col>
     </Container>
   );
 }

@@ -20,6 +20,7 @@ export default function ForecastFiveDays({ date, deg, description, icon, id, spe
   const dateNormalizer = (date) => {
     return date < 10 ? `0${date}` : date;
   };
+
   return (
     <>
       {id && (
