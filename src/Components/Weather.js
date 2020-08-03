@@ -1,9 +1,13 @@
 import React from 'react';
 
-import { Form } from 'react-bootstrap';
+import { Form, Container } from 'react-bootstrap';
 
 import '../assets/css/weather.css';
 import ForecastFiveDays from './ForecastFiveDays';
+
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 const style = {
   ul: {
@@ -28,34 +32,45 @@ icons
   .set('02d', '☁️');
 
 export default function Weather({ country, id, list, name, sunrise, sunset }) {
+  const ref = React.useRef(null);
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 5,
+    slidesToScroll: 5,
+    arrows: true,
+    className: 'sl',
+  };
+
   return (
-    <div>
-      <Form inline>
+    <Container>
+      <Form>
         <ul style={style.ul}>
           <li>Country: {country}</li>
           <li>Id: {id}</li>
           <li>Name: {name}</li>
           <li>Sunrise: {sunrise}</li>
           <li>Sunset: {sunset}</li>
-          <hr />
-          <li className="d-flex">
-            {list.map((item, index) => {
-              const { dt_txt, weather, main, wind } = item;
-              const [weat] = weather;
-              let date = new Date(dt_txt);
-              return (
-                <ForecastFiveDays
-                  key={`${index}_${dt_txt}`}
-                  {...weat}
-                  date={date}
-                  temp={main.temp}
-                  {...wind}
-                />
-              );
-            })}
-          </li>
         </ul>
+        <hr />
+        <Slider ref={ref} {...settings} style={{ padding: '10px' }}>
+          {list.map((item, index) => {
+            const { dt_txt, weather, main, wind } = item;
+            const [weat] = weather;
+            let date = new Date(dt_txt);
+            return (
+              <ForecastFiveDays
+                key={`${index}_${dt_txt}`}
+                {...weat}
+                date={date}
+                temp={main.temp}
+                {...wind}
+              />
+            );
+          })}
+        </Slider>
       </Form>
-    </div>
+    </Container>
   );
 }

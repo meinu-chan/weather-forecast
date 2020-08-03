@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import Forms from './Components/Form';
+import Forms from './Components/Forms';
 import Weather from './Components/Weather';
 
 const API_KEY = '809a9d644a33e1d3d06d73be2a7232b1';

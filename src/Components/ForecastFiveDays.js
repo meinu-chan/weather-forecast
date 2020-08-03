@@ -1,6 +1,7 @@
 import React from 'react';
 
 import compass from '../assets/img/compass.png';
+import '../assets/css/weather.css';
 
 const icons = new Map();
 icons
@@ -30,15 +31,15 @@ export default function ForecastFiveDays({ date, deg, description, icon, id, spe
           <li>
             Weather:{`${icons.has(icon) ? icons.get(icon) : 'icon not found'}  |  ${description}`}
           </li>
-          <li>
-            Wind:{'  '}
+          <li className="d-flex">
+            Wind:
             <img
               src={compass}
               alt={`${deg}`}
               className="image"
               style={{ transform: `rotate(${deg}deg)` }}
             />
-            {`  | ${speed}`}
+            {`  |  ${speed}`}
           </li>
         </ul>
       )}
